@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', Arial;
+    height: 100vh;
+    background: linear-gradient(45deg, #14222e, #2c3c5a);
+    color: #fff;
+}
+
+*.hide { display: none !important; }
+
+.container {
+    position: relative;
+    display: inline-block;
+    padding: 32px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.08));
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: -16px 16px 16px 8px rgba(0, 0, 0, 0.2);
+}
+
+.loader-widget {
+    width: 360px;
+    height: 420px;
+}
+
+
+.loader {
+    position: relative;
+    display: inline-block;
+    height: 240px;
+    width: 240px;
+    border-radius: 50%;
+    background: conic-gradient(rgba(1, 182, 190, 0.3) 0%, transparent 65%);
+    animation: radarRotate 2s linear infinite;
+}
+
+@keyframes radarRotate {
+    100% { transform: rotate(-360deg); }
+}
+
+.loader:before {
+    content: '';
+    position: absolute;
+    height: 0;
+    width: 0;
+    top: 0;
+    left: calc(50% - 8px);
+}
+
+.loader-widget h1 {
+    line-height: 1.3;
+    margin-bottom: 32px;
+    color: #fff;
+ 
+}
+
+.loader-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.loader-content button {
+    position: relative;
+    cursor: pointer;
+    height: 240px;
+    width: 240px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+   
+}
+
+.loader-content.result button {
+    height: 120px;
+    width: 120px;
+    margin-top: 16px;
+}
+
+.loader-content button:hover {
+   opacity:0.9;
+   box-shadow:0px 0px 5px 5px rgba(240,240,240,0.1);
+}
+
+.loader-content button:before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    border: 2px solid lightgray;
+    border-radius: 50%;
+}
+
+
+
+
+ .content {
+    display: flex;
+    width: 100%;
+    font-size: 64px;
+    margin: 12px 0 32px 0;
+    flex-direction: column;
+ }
+
+ .content small {
+    font-size: 40%;
+ }
+		</style>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;700&display=swap" rel="stylesheet">
+	</head>
+<body>
+ <div class="container">
+        <div class="loader-widget">
+            <h1>Internet Speed</h1>
+            <span class="loader hide"></span>
+            <div class="loader-content">
+                <div class="content hide">24<small>Mbps</small></div>
+                <button>CHECK</button>
+            </div>
+        </div>
+    </div>
+<script>
+
+document.querySelector('button').addEventListener('click', (e) => {
+    var imageLink = 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Tokyo_Sky_Tree_2012.JPG',
+        downloadSize = 8185374,
+        time_start, time_end,
+        downloadSrc = new Image();
+    document.querySelector('.loader-content').classList.add('hide');
+    document.querySelector('.loader').classList.remove('hide');
+    time_start = new Date().getTime();
+    console.log(time_start);
+    var cacheImg = "?nn=" + time_start;
+    downloadSrc.src = imageLink + cacheImg;
+    console.log(downloadSrc);
+    downloadSrc.onload = function () {
+        //this function will trigger once the image loads
+        time_end = new Date().getTime();
+        var timeDuration = (time_end - time_start) / 1000;
+            loadedBytes = downloadSize * 8,
+            totalSpeed = ((loadedBytes / timeDuration) / 1024 / 1024).toFixed(2);
+        let i=0, speedOut;
+        const animate = () => {
+            if ( i < totalSpeed ) {
+                document.querySelector('.content').innerHTML = i.toFixed(2) + '<small>Mbps</small>';
+                setTimeout(animate, 20);
+                i+=1.02;
+            } else {
+                document.querySelector('.content').innerHTML = totalSpeed + '<small>Mbps</small>';
+            }
+        }
+        animate();
+
+        document.querySelector('.content').innerHTML = totalSpeed + '<small>Mbps</small>';
+        document.querySelector('.loader-content').classList.remove('hide');
+        document.querySelector('.loader-content').classList.add('result');
+        document.querySelector('.loader').classList.add('hide');
+        document.querySelector('.content').classList.remove('hide');
+        e.target.innerText = 'CHECK AGAIN';
+    }
+})
+
+</script>
+
+
+</body>
+</html>
